@@ -2,8 +2,16 @@ import {StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {useTheme} from '@react-navigation/native';
 
 const Login = () => {
+  const {colors} = useTheme();
+  const [Email, setEmail] = useState('');
+  const [Name, setName] = useState('');
+  const [Debit, setDebit] = useState('');
+  const [Cvv, setCvv] = useState('');
+  const [Income, setIncome] = useState('');
+  const [Expiry, setExpiry] = useState('');
   const [data, setData] = useState(null);
   const prevData = useRef(null);
   useEffect(() => {
@@ -23,6 +31,36 @@ const Login = () => {
     }, []),
   );
 
+  const handleUpdate = () => {
+    fetch(
+      `https://mad-project-b14db-default-rtdb.asia-southeast1.firebasedatabase.app/users/` +
+        '-NLBwNeviSBXfHjYAzPr' +
+        `.json`,
+      {
+        method: 'PATCH',
+        body: JSON.stringify({
+          name: Name,
+          email: Email,
+          debit: Debit,
+          cvv: Cvv,
+          expiry: Expiry,
+          income: Income,
+        }),
+      },
+    );
+    alert('Data Updated');
+    console.log(
+      JSON.stringify({
+        name: Name,
+        email: Email,
+        debit: Debit,
+        cvv: Cvv,
+        expiry: Expiry,
+        income: Income,
+      }),
+    );
+  };
+
   const fetchData = () => {
     // Fetch data from API or do other work
     fetch(
@@ -35,25 +73,26 @@ const Login = () => {
 
   return (
     <KeyboardAwareScrollView
-      style={{backgroundColor: 'black'}}
+      style={{backgroundColor: colors.background}}
       resetScrollToCoords={{x: 0, y: 0}}
       scrollEnabled={true}>
       <View
         style={{
-          height: 700,
+          height: 850,
           width: '100%',
+          top: 150,
           justifyContent: 'center',
           alignItems: 'center',
           alignSelf: 'center',
         }}>
         <Text
           style={{
-            color: 'white',
+            color: colors.text,
             fontSize: 32,
             lineHeight: 84,
             fontWeight: 'Bold',
           }}>
-          Update Information
+          Update Information Below
         </Text>
 
         <View
@@ -61,7 +100,7 @@ const Login = () => {
             width: '90%',
             borderRadius: 35,
             alignSelf: 'center',
-            backgroundColor: 'black',
+            backgroundColor: colors.background,
           }}>
           {data ? (
             Object.keys(data).map(key => (
@@ -69,7 +108,7 @@ const Login = () => {
                 key={key}
                 style={{
                   width: '100%',
-                  height: 400,
+                  height: '100%',
                   alignSelf: 'center',
                 }}>
                 <View
@@ -79,14 +118,16 @@ const Login = () => {
                     alignSelf: 'center',
                     height: 'auto',
                     borderRadius: 30,
-                    backgroundColor: 'black',
+                    backgroundColor: colors.background,
                   }}>
                   <TextInput
-                    placeholder="Enter Name"
-                    value={data[key].name}
-                    placeholderTextColor="white"
+                    placeholder={'Name :' + data[key].name}
+                    onChangeText={text => {
+                      setName(text);
+                    }}
+                    placeholderTextColor={colors.text}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 30,
@@ -94,15 +135,15 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}></TextInput>
                   <TextInput
-                    placeholder="Enter email"
-                    placeholderTextColor="white"
-                    value={data[key].email}
+                    placeholder={'Email: ' + data[key].email}
+                    placeholderTextColor={colors.text}
+                    onChangeText={setEmail}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 20,
@@ -110,16 +151,16 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}
                   />
                   <TextInput
-                    placeholder="Enter Debit Card Number"
-                    placeholderTextColor="white"
-                    value={data[key].debit}
+                    placeholder={'Debit Card: ' + data[key].debit}
+                    placeholderTextColor={colors.text}
+                    onChangeText={setDebit}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 20,
@@ -127,16 +168,16 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}
                   />
                   <TextInput
-                    placeholder="Enter Card Expiry Date"
-                    placeholderTextColor="white"
-                    value={data[key].expiry}
+                    placeholder={'Expiry Date: ' + data[key].expiry}
+                    placeholderTextColor={colors.text}
+                    onChangeText={setExpiry}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 20,
@@ -144,16 +185,16 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}
                   />
                   <TextInput
-                    placeholder="Enter CVV"
-                    placeholderTextColor="white"
-                    value={data[key].cvv}
+                    placeholder={'CVV: ' + data[key].cvv}
+                    placeholderTextColor={colors.text}
+                    onChangeText={setCvv}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 20,
@@ -161,17 +202,17 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}
                   />
 
                   <TextInput
-                    placeholder="Enter Income"
-                    placeholderTextColor="white"
-                    value={data[key].income}
+                    placeholder={'Income: ' + data[key].income + ' .PKR'}
+                    placeholderTextColor={colors.text}
+                    onChangeText={setIncome}
                     style={{
-                      color: 'white',
+                      color: colors.text,
                       fontSize: 20,
                       fontStyle: 'bold',
                       marginTop: 20,
@@ -179,7 +220,7 @@ const Login = () => {
                       width: '100%',
                       textAlign: 'center',
                       borderWidth: 2,
-                      borderColor: 'white',
+                      borderColor: colors.text,
                       borderRadius: 10,
                     }}
                   />
@@ -193,6 +234,7 @@ const Login = () => {
                       top: 30,
                     }}>
                     <Pressable
+                      onPress={handleUpdate}
                       style={{
                         height: 40,
                         width: 'auto',
@@ -203,7 +245,7 @@ const Login = () => {
                       }}>
                       <Text
                         style={{
-                          color: 'white',
+                          color: colors.text,
                           fontSize: 20,
                           fontStyle: 'bold',
                         }}>

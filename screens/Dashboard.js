@@ -2,8 +2,11 @@ import {StyleSheet, Text, View, Image, Pressable} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {useTheme} from '@react-navigation/native';
 
 const Dashboard = ({navigation}) => {
+  const {colors} = useTheme();
   const [data, setData] = useState(null);
   const prevData = useRef(null);
   useEffect(() => {
@@ -35,7 +38,7 @@ const Dashboard = ({navigation}) => {
 
   return (
     <KeyboardAwareScrollView
-      style={{backgroundColor: 'black'}}
+      style={{color: colors.background}}
       resetScrollToCoords={{x: 0, y: 0}}
       scrollEnabled={true}>
       <View style={{height: 'auto', width: 'auto'}}>
@@ -45,30 +48,61 @@ const Dashboard = ({navigation}) => {
             height: 250,
             marginTop: 20,
             borderRadius: 35,
-            backgroundColor: 'black',
+            color: colors.background,
           }}>
           <View
             style={{
-              flexDirection: 'column',
+              flexDirection: 'row',
             }}>
-            <Text
+            <View
               style={{
-                color: 'white',
-                fontSize: 34,
-                fontStyle: 'bold',
-                marginLeft: 30,
+                flexDirection: 'column',
               }}>
-              Hi,
-            </Text>
-            <Text
+              <Text
+                style={{
+                  color: colors.text,
+                  fontSize: 34,
+                  fontStyle: 'bold',
+                  marginLeft: 30,
+                }}>
+                Hi,
+              </Text>
+              <Text
+                style={{
+                  color: colors.text,
+                  fontSize: 34,
+                  fontStyle: 'bold',
+                  marginLeft: 30,
+                }}>
+                Taseer Haider
+              </Text>
+            </View>
+            <View
               style={{
-                color: 'white',
-                fontSize: 34,
-                fontStyle: 'bold',
-                marginLeft: 30,
+                width: 50,
+                height: 50,
+                marginTop: 20,
+                marginLeft: 70,
+                borderWidth: 2,
+                color: colors.background,
+                backgroundColor: 'white',
+                borderRadius: 50,
               }}>
-              Taseer Haider
-            </Text>
+              <Pressable
+                onPress={() => navigation.navigate('Charts')}
+                style={{
+                  height: 50,
+                  width: 50,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <FontAwesome
+                  name="pie-chart"
+                  size={25}
+                  color={'black'}></FontAwesome>
+              </Pressable>
+            </View>
           </View>
           <View
             style={{
@@ -79,8 +113,8 @@ const Dashboard = ({navigation}) => {
             }}>
             <View
               style={{
-                width: 170,
-                height: 100,
+                width: 200,
+                height: 50,
                 marginTop: 35,
                 backgroundColor: '#01DBB7',
                 borderRadius: 15,
@@ -88,10 +122,10 @@ const Dashboard = ({navigation}) => {
               <Pressable
                 onPress={() => navigation.navigate('Login')}
                 style={{
-                  height: 90,
-                  width: 180,
+                  height: 50,
+                  width: 200,
                   alignSelf: 'center',
-                  marginTop: 20,
+                  marginTop: 10,
                   borderRadius: 10,
                 }}>
                 <Text
@@ -101,55 +135,7 @@ const Dashboard = ({navigation}) => {
                     fontStyle: 'bold',
                     alignSelf: 'center',
                   }}>
-                  Income
-                </Text>
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: 20,
-                    marginTop: 5,
-                    fontStyle: 'italic',
-                    alignSelf: 'center',
-                  }}>
-                  Rs. 2500
-                </Text>
-              </Pressable>
-            </View>
-            <View
-              style={{
-                width: 170,
-                height: 100,
-                marginTop: 35,
-                backgroundColor: '#E1E1E1',
-                borderRadius: 15,
-              }}>
-              <Pressable
-                onPress={() => navigation.navigate('Login')}
-                style={{
-                  height: 90,
-                  width: 180,
-                  alignSelf: 'center',
-                  marginTop: 20,
-                  borderRadius: 10,
-                }}>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 20,
-                    fontStyle: 'bold',
-                    alignSelf: 'center',
-                  }}>
-                  Expenses
-                </Text>
-                <Text
-                  style={{
-                    color: 'black',
-                    fontSize: 20,
-                    marginTop: 5,
-                    fontStyle: 'italic',
-                    alignSelf: 'center',
-                  }}>
-                  Rs. 12
+                  Income: 123 .PKR
                 </Text>
               </Pressable>
             </View>
@@ -160,10 +146,9 @@ const Dashboard = ({navigation}) => {
           style={{
             width: 'auto',
             height: 'auto',
-            marginTop: 20,
             marginBottom: 90,
             borderRadius: 35,
-            backgroundColor: 'black',
+            color: colors.background,
           }}>
           {data ? (
             Object.keys(data).map(key => (
@@ -172,12 +157,20 @@ const Dashboard = ({navigation}) => {
                 style={{
                   width: '90%',
                   height: 90,
-                  marginTop: 35,
+                  marginTop: 25,
                   alignSelf: 'center',
-                  backgroundColor: '#5D5D5D',
+                  backgroundColor: '#01DBB7',
                   borderRadius: 15,
                 }}>
                 <Pressable
+                  onPress={() =>
+                    navigation.navigate('EditExpense', {
+                      Expense: data[key].expense,
+                      date: data[key].real_date,
+                      Category: data[key].value,
+                      Key: key,
+                    })
+                  }
                   style={{
                     height: 90,
                     width: 320,
@@ -187,33 +180,32 @@ const Dashboard = ({navigation}) => {
                   <View style={{flexDirection: 'row'}}>
                     <Text
                       style={{
-                        color: '#01DBB7',
+                        color: 'white',
                         fontSize: 20,
-                        fontStyle: 'bold',
+                        fontStyle: 'italic',
                         textAlign: 'left',
                       }}>
-                      {data[key].expense}
+                      Ammount: {data[key].expense}
                     </Text>
                     <Text
                       style={{
-                        color: '#01DBB7',
+                        color: 'white',
                         fontSize: 20,
-                        marginTop: 5,
                         fontStyle: 'italic',
-                        marginLeft: 80,
+                        marginLeft: 10,
                       }}>
-                      {data[key].real_date}
+                      Date: {data[key].real_date}
                     </Text>
                   </View>
                   <Text
                     style={{
-                      color: '#01DBB7',
+                      color: 'white',
                       fontSize: 20,
                       marginTop: 5,
                       fontStyle: 'italic',
-                      textAlign: 'left',
+                      textAlign: 'center',
                     }}>
-                    {data[key].value}
+                    Expense Category: {data[key].value}
                   </Text>
                 </Pressable>
               </View>
